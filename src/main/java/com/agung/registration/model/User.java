@@ -1,15 +1,26 @@
 package com.agung.registration.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Table("users")
 public class User {
+    @Id
     private Long id;
     private String username;
     private String email;
+    @Column("password_hash")
     private String passwordHash;
+    @Column("full_name")
     private String fullName;
+    @Column("city_id")
     private Long cityId;
+    @Transient
     private City city;
     private String status;
     private LocalDateTime createdAt;

@@ -43,8 +43,12 @@ public class LocationServiceImpl implements LocationService {
         if (id == null) {
             throw new ValidationException("City ID cannot be null");
         }
-        return cityDao.findById(id)
+        City city = cityDao.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("City with id " + id + " not found"));
+        if (city.getProvinceId() != null) {
+            provinceDao.findById(city.getProvinceId()).ifPresent(city::setProvince);
+        }
+        return city;
     }
 
     @Override

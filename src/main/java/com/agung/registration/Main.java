@@ -18,7 +18,7 @@ public class Main {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class)) {
             RegistrationFacade registrationFacade = context.getBean(RegistrationFacade.class);
 
-            System.out.println("=== Running with Spring IoC & Declarative Transaction (@Transactional) ===");
+            System.out.println("=== Running with Spring Data JDBC (CrudRepository - Zero DAO Boilerplate) ===");
             System.out.println("=== Master Data Wilayah ===");
             List<Province> provinces = registrationFacade.getAvailableProvinces();
             for (Province p : provinces) {

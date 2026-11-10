@@ -1,11 +1,20 @@
 package com.agung.registration.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Table("cities")
 public class City {
+    @Id
     private Long id;
+    @Column("province_id")
     private Long provinceId;
+    @Transient
     private Province province;
     private String name;
     private LocalDateTime createdAt;

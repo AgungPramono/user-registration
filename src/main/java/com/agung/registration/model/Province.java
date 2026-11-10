@@ -1,9 +1,14 @@
 package com.agung.registration.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Table("provinces")
 public class Province {
+    @Id
     private Long id;
     private String code;
     private String name;

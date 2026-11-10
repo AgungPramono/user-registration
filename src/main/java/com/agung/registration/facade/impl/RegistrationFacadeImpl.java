@@ -77,12 +77,13 @@ public class RegistrationFacadeImpl implements RegistrationFacade {
         dto.setCreatedAt(user.getCreatedAt());
         dto.setUpdatedAt(user.getUpdatedAt());
 
-        if (user.getCity() != null) {
-            dto.setCityName(user.getCity().getName());
-            if (user.getCity().getProvince() != null) {
-                dto.setProvinceId(user.getCity().getProvince().getId());
-                dto.setProvinceCode(user.getCity().getProvince().getCode());
-                dto.setProvinceName(user.getCity().getProvince().getName());
+        if (user.getCityId() != null) {
+            City city = locationService.getCityById(user.getCityId());
+            dto.setCityName(city.getName());
+            if (city.getProvince() != null) {
+                dto.setProvinceId(city.getProvince().getId());
+                dto.setProvinceCode(city.getProvince().getCode());
+                dto.setProvinceName(city.getProvince().getName());
             }
         }
 

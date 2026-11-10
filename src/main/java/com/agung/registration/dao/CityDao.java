@@ -1,13 +1,13 @@
 package com.agung.registration.dao;
 
 import com.agung.registration.model.City;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface CityDao {
-    Optional<City> findById(Long id);
+@Repository
+public interface CityDao extends CrudRepository<City, Long> {
     List<City> findByProvinceId(Long provinceId);
     List<City> findAll();
-    City save(City city);
 }
