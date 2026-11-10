@@ -12,10 +12,14 @@ import com.agung.registration.model.User;
 import com.agung.registration.service.LocationService;
 import com.agung.registration.service.UserService;
 import com.agung.registration.util.PasswordHasher;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
+@Service
+@Transactional(readOnly = true)
 public class RegistrationFacadeImpl implements RegistrationFacade {
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
@@ -30,6 +34,7 @@ public class RegistrationFacadeImpl implements RegistrationFacade {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public RegistrationResponse register(RegistrationRequest request) {
         validateRegistrationRequest(request);
 

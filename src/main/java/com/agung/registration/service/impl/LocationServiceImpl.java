@@ -7,9 +7,13 @@ import com.agung.registration.exception.ValidationException;
 import com.agung.registration.model.City;
 import com.agung.registration.model.Province;
 import com.agung.registration.service.LocationService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
+@Transactional(readOnly = true)
 public class LocationServiceImpl implements LocationService {
 
     private final ProvinceDao provinceDao;
@@ -57,6 +61,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    @Transactional
     public Province createProvince(String code, String name) {
         if (code == null || code.isBlank()) {
             throw new ValidationException("Province code is required");
@@ -69,6 +74,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    @Transactional
     public City createCity(Long provinceId, String name) {
         if (provinceId == null) {
             throw new ValidationException("Province ID is required");

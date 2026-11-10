@@ -1,63 +1,30 @@
 package com.agung.registration;
 
-import com.agung.registration.config.DatabaseConfig;
-import com.agung.registration.config.SchemaInitializer;
-import com.agung.registration.dao.CityDao;
-import com.agung.registration.dao.ProvinceDao;
-import com.agung.registration.dao.UserDao;
-import com.agung.registration.dao.springjdbc.CityDaoSpringJdbc;
-import com.agung.registration.dao.springjdbc.ProvinceDaoSpringJdbc;
-import com.agung.registration.dao.springjdbc.UserDaoSpringJdbc;
+import com.agung.registration.config.AppConfig;
 import com.agung.registration.dto.RegistrationRequest;
 import com.agung.registration.dto.RegistrationResponse;
 import com.agung.registration.dto.UserDetailDto;
-import com.agung.registration.exception.DuplicateResourceException;
 import com.agung.registration.exception.ValidationException;
 import com.agung.registration.facade.RegistrationFacade;
-import com.agung.registration.facade.impl.RegistrationFacadeImpl;
 import com.agung.registration.model.City;
 import com.agung.registration.model.Province;
-import com.agung.registration.service.LocationService;
-import com.agung.registration.service.UserService;
-import com.agung.registration.service.impl.LocationServiceImpl;
-import com.agung.registration.service.impl.UserServiceImpl;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringJUnitConfig(AppConfig.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RegistrationFacadeTest {
 
-    private static RegistrationFacade registrationFacade;
-    private static DatabaseConfig dbConfig;
-
-    @BeforeAll
-    static void setUp() {
-        dbConfig = DatabaseConfig.getInstance();
-        DataSource dataSource = dbConfig.getDataSource();
-
-        ProvinceDao provinceDao = new ProvinceDaoSpringJdbc(dataSource);
-        CityDao cityDao = new CityDaoSpringJdbc(dataSource);
-        UserDao userDao = new UserDaoSpringJdbc(dataSource);
-
-        SchemaInitializer initializer = new SchemaInitializer(dataSource, provinceDao, cityDao);
-        initializer.initialize();
-
-        LocationService locationService = new LocationServiceImpl(provinceDao, cityDao);
-        UserService userService = new UserServiceImpl(userDao);
-
-        registrationFacade = new RegistrationFacadeImpl(userService, locationService);
-    }
-
-    @AfterAll
-    static void tearDown() {
-        if (dbConfig != null) {
-            dbConfig.close();
-        }
-    }
+    @Autowired
+    private RegistrationFacade registrationFacade;
 
     @Test
     @Order(1)

@@ -5,10 +5,14 @@ import com.agung.registration.exception.DuplicateResourceException;
 import com.agung.registration.exception.ValidationException;
 import com.agung.registration.model.User;
 import com.agung.registration.service.UserService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
@@ -18,6 +22,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User createUser(User user) {
         if (user == null) {
             throw new ValidationException("User object cannot be null");

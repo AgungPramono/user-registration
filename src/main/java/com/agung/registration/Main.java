@@ -1,49 +1,24 @@
 package com.agung.registration;
 
-import com.agung.registration.config.DatabaseConfig;
-import com.agung.registration.config.SchemaInitializer;
-import com.agung.registration.dao.CityDao;
-import com.agung.registration.dao.ProvinceDao;
-import com.agung.registration.dao.UserDao;
-import com.agung.registration.dao.springjdbc.CityDaoSpringJdbc;
-import com.agung.registration.dao.springjdbc.ProvinceDaoSpringJdbc;
-import com.agung.registration.dao.springjdbc.UserDaoSpringJdbc;
+import com.agung.registration.config.AppConfig;
 import com.agung.registration.dto.RegistrationRequest;
 import com.agung.registration.dto.RegistrationResponse;
 import com.agung.registration.dto.UserDetailDto;
 import com.agung.registration.exception.AppException;
 import com.agung.registration.facade.RegistrationFacade;
-import com.agung.registration.facade.impl.RegistrationFacadeImpl;
 import com.agung.registration.model.City;
 import com.agung.registration.model.Province;
-import com.agung.registration.service.LocationService;
-import com.agung.registration.service.UserService;
-import com.agung.registration.service.impl.LocationServiceImpl;
-import com.agung.registration.service.impl.UserServiceImpl;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-        DatabaseConfig dbConfig = DatabaseConfig.getInstance();
-        DataSource dataSource = dbConfig.getDataSource();
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class)) {
+            RegistrationFacade registrationFacade = context.getBean(RegistrationFacade.class);
 
-        try {
-            ProvinceDao provinceDao = new ProvinceDaoSpringJdbc(dataSource);
-            CityDao cityDao = new CityDaoSpringJdbc(dataSource);
-            UserDao userDao = new UserDaoSpringJdbc(dataSource);
-
-            SchemaInitializer initializer = new SchemaInitializer(dataSource, provinceDao, cityDao);
-            initializer.initialize();
-
-            LocationService locationService = new LocationServiceImpl(provinceDao, cityDao);
-            UserService userService = new UserServiceImpl(userDao);
-
-            RegistrationFacade registrationFacade = new RegistrationFacadeImpl(userService, locationService);
-
-            System.out.println("=== Running with Spring JDBC (JdbcClient & SimpleJdbcInsert) ===");
+            System.out.println("=== Running with Spring IoC & Declarative Transaction (@Transactional) ===");
             System.out.println("=== Master Data Wilayah ===");
             List<Province> provinces = registrationFacade.getAvailableProvinces();
             for (Province p : provinces) {
@@ -56,8 +31,8 @@ public class Main {
 
             System.out.println("\n=== Registrasi User Baru ===");
             Long sampleCityId = provinces.getFirst().getId();
-            List<City> dkiCities = registrationFacade.getCitiesByProvince(sampleCityId);
-            Long targetCityId = dkiCities.getFirst().getId();
+            List<City> cities = registrationFacade.getCitiesByProvince(sampleCityId);
+            Long targetCityId = cities.getFirst().getId();
 
             String uniqueSuffix = String.valueOf(System.currentTimeMillis() % 10000);
             RegistrationRequest request = new RegistrationRequest(
@@ -88,9 +63,8 @@ public class Main {
             } catch (AppException e) {
                 System.out.println("Validasi tertangkap sesuai harapan: " + e.getMessage());
             }
-
         } finally {
-            dbConfig.close();
+            com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkedShutdown();
         }
     }
 }
