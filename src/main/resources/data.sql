@@ -1,0 +1,33 @@
+INSERT IGNORE INTO provinces (code, name) VALUES
+('DKI', 'DKI Jakarta'),
+('JB', 'Jawa Barat'),
+('JT', 'Jawa Tengah'),
+('JI', 'Jawa Timur'),
+('BA', 'Bali'),
+('YO', 'DI Yogyakarta'),
+('SU', 'Sumatera Utara');
+
+INSERT IGNORE INTO cities (province_id, name) VALUES
+((SELECT id FROM provinces WHERE code = 'DKI'), 'Kota Jakarta Pusat'),
+((SELECT id FROM provinces WHERE code = 'DKI'), 'Kota Jakarta Selatan'),
+((SELECT id FROM provinces WHERE code = 'DKI'), 'Kota Jakarta Barat'),
+((SELECT id FROM provinces WHERE code = 'DKI'), 'Kota Jakarta Timur'),
+((SELECT id FROM provinces WHERE code = 'DKI'), 'Kota Jakarta Utara'),
+((SELECT id FROM provinces WHERE code = 'DKI'), 'Kabupaten Kepulauan Seribu'),
+((SELECT id FROM provinces WHERE code = 'JB'), 'Kota Bandung'),
+((SELECT id FROM provinces WHERE code = 'JB'), 'Kota Bogor'),
+((SELECT id FROM provinces WHERE code = 'JB'), 'Kota Bekasi'),
+((SELECT id FROM provinces WHERE code = 'JB'), 'Kota Depok'),
+((SELECT id FROM provinces WHERE code = 'JB'), 'Kabupaten Bandung'),
+((SELECT id FROM provinces WHERE code = 'JT'), 'Kota Semarang'),
+((SELECT id FROM provinces WHERE code = 'JT'), 'Kota Surakarta'),
+((SELECT id FROM provinces WHERE code = 'JT'), 'Kabupaten Banyumas'),
+((SELECT id FROM provinces WHERE code = 'JI'), 'Kota Surabaya'),
+((SELECT id FROM provinces WHERE code = 'JI'), 'Kota Malang'),
+((SELECT id FROM provinces WHERE code = 'JI'), 'Kabupaten Sidoarjo'),
+((SELECT id FROM provinces WHERE code = 'BA'), 'Kota Denpasar'),
+((SELECT id FROM provinces WHERE code = 'BA'), 'Kabupaten Badung'),
+((SELECT id FROM provinces WHERE code = 'BA'), 'Kabupaten Gianyar'),
+((SELECT id FROM provinces WHERE code = 'YO'), 'Kota Yogyakarta'),
+((SELECT id FROM provinces WHERE code = 'YO'), 'Kabupaten Sleman'),
+((SELECT id FROM provinces WHERE code = 'SU'), 'Kota Medan');
