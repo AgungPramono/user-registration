@@ -5,9 +5,9 @@ import com.agung.registration.config.SchemaInitializer;
 import com.agung.registration.dao.CityDao;
 import com.agung.registration.dao.ProvinceDao;
 import com.agung.registration.dao.UserDao;
-import com.agung.registration.dao.jdbc.CityDaoJdbc;
-import com.agung.registration.dao.jdbc.ProvinceDaoJdbc;
-import com.agung.registration.dao.jdbc.UserDaoJdbc;
+import com.agung.registration.dao.springjdbc.CityDaoSpringJdbc;
+import com.agung.registration.dao.springjdbc.ProvinceDaoSpringJdbc;
+import com.agung.registration.dao.springjdbc.UserDaoSpringJdbc;
 import com.agung.registration.dto.RegistrationRequest;
 import com.agung.registration.dto.RegistrationResponse;
 import com.agung.registration.dto.UserDetailDto;
@@ -39,9 +39,9 @@ public class RegistrationFacadeTest {
         dbConfig = DatabaseConfig.getInstance();
         DataSource dataSource = dbConfig.getDataSource();
 
-        ProvinceDao provinceDao = new ProvinceDaoJdbc(dataSource);
-        CityDao cityDao = new CityDaoJdbc(dataSource);
-        UserDao userDao = new UserDaoJdbc(dataSource);
+        ProvinceDao provinceDao = new ProvinceDaoSpringJdbc(dataSource);
+        CityDao cityDao = new CityDaoSpringJdbc(dataSource);
+        UserDao userDao = new UserDaoSpringJdbc(dataSource);
 
         SchemaInitializer initializer = new SchemaInitializer(dataSource, provinceDao, cityDao);
         initializer.initialize();
